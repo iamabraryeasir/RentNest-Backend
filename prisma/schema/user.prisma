@@ -1,0 +1,16 @@
+model User {
+    id        String     @id @default(uuid())
+    name      String
+    email     String     @unique
+    password  String
+    role      Role
+    status    UserStatus @default(ACTIVE)
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+
+    properties Property[]
+    rentals    RentalRequest[]
+    reviews    Review[]
+
+    @@map("users")
+}
