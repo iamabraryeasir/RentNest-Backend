@@ -10,6 +10,8 @@ import express, { Application } from "express";
  */
 import apiRouter from "./api";
 import config from "./config";
+import { globalErrorHandler } from "./utils/globalErrorHandler";
+import { notFoundHandler } from "./utils/notFound";
 
 /**
  * App Initialization
@@ -41,11 +43,12 @@ app.use("/api", apiRouter);
 /**
  * 404 Error Handling
  */
-
+app.use(notFoundHandler);
 
 /**
  * Global Error Handling
  */
+app.use(globalErrorHandler);
 
 /**
  * Exporting the App
