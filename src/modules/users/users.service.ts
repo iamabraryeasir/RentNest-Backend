@@ -141,6 +141,32 @@ async function updateUserStatus(
 }
 
 /**
+ * Delete User
+ */
+async function deleteUser(userId: string) {
+    // Check if user exists
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
+    });
+
+    if (!user) {
+        throw new AppError(status.NOT_FOUND, "User not found.");
+    }
+
+    // Delete user
+    await prisma.user.delete({
+        where: { id: userId },
+    });
+
+    return;
+}
+
+/**
  * Export User Service
  */
-export const userService = { updateUserProfile, getUserById, updateUserStatus };
+export const userService = {
+    updateUserProfile,
+    getUserById,
+    updateUserStatus,
+    deleteUser,
+};

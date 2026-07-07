@@ -42,7 +42,7 @@ usersRouter.patch(
 /**
  * Delete User: DELETE /api/users/:id
  */
-usersRouter.delete("/:id", checkAuth(Role.ADMIN), () => {});
+usersRouter.delete("/:id", checkAuth(Role.ADMIN), userController.deleteUser);
 
 /**
  * Export User Router

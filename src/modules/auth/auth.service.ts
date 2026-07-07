@@ -75,6 +75,7 @@ async function registerUser(payload: IRegisterUserPayload) {
 
     // Return the name, email, role and status
     return {
+        id: newUser.id,
         name: newUser.name,
         email: newUser.email,
         role: newUser.role,
