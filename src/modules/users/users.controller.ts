@@ -34,6 +34,25 @@ const updateUserProfile = catchAsync(
 );
 
 /**
+ * Get All Users
+ */
+const getAllUsers = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const query = req.query;
+
+        const result = await userService.getAllUsers(query);
+
+        return sendResponse(res, {
+            success: true,
+            statusCode: status.OK,
+            message: "Users retrieved successfully",
+            meta: result.meta,
+            data: result.data,
+        });
+    },
+);
+
+/**
  * Get User By Id
  */
 const getUserById = catchAsync(
@@ -94,6 +113,7 @@ const deleteUser = catchAsync(
  */
 export const userController = {
     updateUserProfile,
+    getAllUsers,
     getUserById,
     updateUserStatus,
     deleteUser,

@@ -9,6 +9,7 @@ import status from "http-status";
 import { User } from "../../../generated/prisma/client";
 import { AppError } from "../../utils/AppError";
 import { prisma } from "../../utils/prisma";
+import { parseQuery, IQueryOptions } from "../../utils/queryHelpers";
 import { IUserUpdateStatusPayload } from "./users.interface";
 
 /**
@@ -70,6 +71,57 @@ async function updateUserProfile(userId: string, payload: Partial<User>) {
     });
 
     return updatedUser;
+}
+
+/**
+ * Get All Users
+ */
+async function getAllUsers(query: IQueryOptions) {
+    const { page, limit, skip, sortBy, sortOrder, search, filters } = parseQuery(
+        query,
+        ["role", "status"],
+        ["createdAt", "name", "email", "role", "status"],
+    );
+
+    const whereConditions: Record<string, any> = { ...filters };
+
+    if (search) {
+        whereConditions.OR = [
+            { name: { contains: search, mode: "insensitive" } },
+            { email: { contains: search, mode: "insensitive" } },
+        ];
+    }
+
+    const users = await prisma.user.findMany({
+        where: whereConditions,
+        skip,
+        take: limit,
+        orderBy: {
+            [sortBy]: sortOrder,
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            status: true,
+            createdAt: true,
+            updatedAt: true,
+        },
+    });
+
+    const total = await prisma.user.count({
+        where: whereConditions,
+    });
+
+    return {
+        meta: {
+            page,
+            limit,
+            total,
+        },
+        data: users,
+    };
 }
 
 /**
@@ -166,6 +218,7 @@ async function deleteUser(userId: string) {
  */
 export const userService = {
     updateUserProfile,
+    getAllUsers,
     getUserById,
     updateUserStatus,
     deleteUser,

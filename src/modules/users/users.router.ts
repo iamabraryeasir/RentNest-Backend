@@ -23,7 +23,7 @@ usersRouter.patch("/profile", checkAuth(), userController.updateUserProfile);
 /**
  * Get All Users: GET /api/users
  */
-usersRouter.get("/", checkAuth(Role.ADMIN), () => {});
+usersRouter.get("/", checkAuth(Role.ADMIN), userController.getAllUsers);
 
 /**
  * Get Single User: GET /api/users/:id
