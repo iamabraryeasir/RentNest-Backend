@@ -112,10 +112,39 @@ const getNewRefreshToken = catchAsync(
 );
 
 /**
+ * Logout User
+ */
+const logoutUser = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const isProduction = config.SYSTEM.NODE_ENV === "production";
+
+        res.clearCookie("accessToken", {
+            secure: isProduction,
+            httpOnly: true,
+            sameSite: "lax",
+        });
+
+        res.clearCookie("refreshToken", {
+            secure: isProduction,
+            httpOnly: true,
+            sameSite: "lax",
+        });
+
+        return sendResponse(res, {
+            success: true,
+            statusCode: status.OK,
+            message: "User logged out successfully",
+            data: null,
+        });
+    },
+);
+
+/**
  * Export Auth Controller
  */
 export const authController = {
     registerUser,
     loginUser,
     getNewRefreshToken,
+    logoutUser,
 };

@@ -36,7 +36,7 @@ authRouter.post("/refresh-token", authController.getNewRefreshToken);
 /**
  * Logout User : POST /api/auth/logout
  */
-authRouter.post("/logout", () => {});
+authRouter.post("/logout", authController.logoutUser);
 
 /**
  * Export
