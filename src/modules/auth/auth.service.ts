@@ -17,7 +17,7 @@ import { ILoginUserPayload, IRegisterUserPayload } from "./auth.interface";
 /**
  * User Registration Service
  */
-const registerUser = async (payload: IRegisterUserPayload) => {
+async function registerUser(payload: IRegisterUserPayload) {
     const { name, email, password, role } = payload;
 
     // User input validation
@@ -80,12 +80,12 @@ const registerUser = async (payload: IRegisterUserPayload) => {
         role: newUser.role,
         status: newUser.status,
     };
-};
+}
 
 /**
  * User Login Service
  */
-const loginUser = async (payload: ILoginUserPayload) => {
+async function loginUser(payload: ILoginUserPayload) {
     const { email, password } = payload;
 
     // Validate user input
@@ -147,12 +147,12 @@ const loginUser = async (payload: ILoginUserPayload) => {
             status: user.status,
         },
     };
-};
+}
 
 /**
  * Get Current Login User
  */
-const getLogedInUser = async (userId: string) => {
+async function getLogedInUser(userId: string) {
     const user = await prisma.user.findUnique({
         where: { id: userId },
     });
@@ -172,12 +172,12 @@ const getLogedInUser = async (userId: string) => {
         role: user.role,
         status: user.status,
     };
-};
+}
 
 /**
  * Get New Access Token Using Refresh Token
  */
-const getNewRefreshToken = async (refreshToken: string) => {
+async function getNewRefreshToken(refreshToken: string) {
     // Verify refresh token
     const decoded = verifyToken(refreshToken, config.JWT.REFRESH.SECRET) as {
         id: string;
@@ -222,7 +222,7 @@ const getNewRefreshToken = async (refreshToken: string) => {
         accessToken,
         refreshToken: newRefreshToken,
     };
-};
+}
 
 /**
  * Export Auth Service
