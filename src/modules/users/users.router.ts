@@ -28,7 +28,7 @@ usersRouter.get("/", checkAuth(Role.ADMIN), () => {});
 /**
  * Get Single User: GET /api/users/:id
  */
-usersRouter.get("/:id", checkAuth(Role.ADMIN), () => {});
+usersRouter.get("/:id", checkAuth(Role.ADMIN), userController.getUserById);
 
 /**
  * Update User Status: PATCH /api/users/:id/status

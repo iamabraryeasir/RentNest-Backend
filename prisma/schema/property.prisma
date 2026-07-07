@@ -8,6 +8,7 @@ model Property {
     city       String
     area       String?
     postalCode String?
+    images     String[]
 
     rentAmount Decimal @db.Decimal(10, 2)
 

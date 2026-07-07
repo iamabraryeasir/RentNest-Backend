@@ -33,6 +33,24 @@ const updateUserProfile = catchAsync(
 );
 
 /**
+ * Get User By Id
+ */
+const getUserById = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const userId = req.params.id as string;
+
+        const user = await userService.getUserById(userId);
+
+        return sendResponse(res, {
+            success: true,
+            statusCode: status.OK,
+            message: "User retrieved successfully",
+            data: user,
+        });
+    },
+);
+
+/**
  * Export User Controller
  */
-export const userController = { updateUserProfile };
+export const userController = { updateUserProfile, getUserById };
