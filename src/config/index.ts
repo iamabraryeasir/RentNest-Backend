@@ -7,6 +7,10 @@ const config = {
     },
 
     FRONTEND_URL: process.env.FRONTEND_URL || "http://localhost:3000",
+
+    DATABASE: {
+        URL: process.env.DATABASE_URL as string,
+    },
 };
 
 export default Object.freeze(config);
