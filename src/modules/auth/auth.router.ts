@@ -21,7 +21,7 @@ authRouter.post("/register", authController.registerUser);
 /**
  * Login User : POST /api/auth/login
  */
-authRouter.post("/login", () => {});
+authRouter.post("/login", authController.loginUser);
 
 /**
  * Current User : GET /api/auth/me

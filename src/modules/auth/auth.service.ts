@@ -7,8 +7,10 @@ import status from "http-status";
 /**
  * Local Modules
  */
-import { Role } from "../../../generated/prisma/enums";
+import { Role, UserStatus } from "../../../generated/prisma/enums";
+import config from "../../config";
 import { AppError } from "../../utils/AppError";
+import { generateToken } from "../../utils/jwt";
 import { prisma } from "../../utils/prisma";
 import { ILoginUserPayload, IRegisterUserPayload } from "./auth.interface";
 
@@ -84,7 +86,67 @@ const registerUser = async (payload: IRegisterUserPayload) => {
  * User Login Service
  */
 const loginUser = async (payload: ILoginUserPayload) => {
-    return payload;
+    const { email, password } = payload;
+
+    // Validate user input
+    if (!email || typeof email !== "string" || !/^\S+@\S+\.\S+$/.test(email)) {
+        throw new AppError(status.BAD_REQUEST, "A valid email is required.");
+    }
+    if (!password || typeof password !== "string" || password.trim() === "") {
+        throw new AppError(status.BAD_REQUEST, "Password is required.");
+    }
+
+    // Match email and password
+    const user = await prisma.user.findUnique({
+        where: { email },
+    });
+
+    if (!user) {
+        throw new AppError(status.UNAUTHORIZED, "Incorrect email or password.");
+    }
+
+    // Check user status
+    if (user.status === UserStatus.BLOCKED) {
+        throw new AppError(status.FORBIDDEN, "Your account is blocked.");
+    }
+
+    // Match password
+    const isPasswordMatched = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatched) {
+        throw new AppError(status.UNAUTHORIZED, "Incorrect email or password.");
+    }
+
+    // Generate JWT tokens
+    const jwtPayload = {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+    };
+
+    const accessToken = generateToken(
+        jwtPayload,
+        config.JWT.ACCESS.SECRET,
+        config.JWT.ACCESS.EXPIRES_IN,
+    );
+
+    const refreshToken = generateToken(
+        jwtPayload,
+        config.JWT.REFRESH.SECRET,
+        config.JWT.REFRESH.EXPIRES_IN,
+    );
+
+    // Return the tokens and user details
+    return {
+        accessToken,
+        refreshToken,
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            status: user.status,
+        },
+    };
 };
 
 /**
