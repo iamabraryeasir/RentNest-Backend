@@ -31,7 +31,7 @@ authRouter.get("/me", () => {});
 /**
  * Refresh Token : POST /api/auth/refresh-token
  */
-authRouter.post("/refresh-token", () => {});
+authRouter.post("/refresh-token", authController.getNewRefreshToken);
 
 /**
  * Logout User : POST /api/auth/logout

@@ -10,7 +10,7 @@ import status from "http-status";
 import { Role, UserStatus } from "../../../generated/prisma/enums";
 import config from "../../config";
 import { AppError } from "../../utils/AppError";
-import { generateToken } from "../../utils/jwt";
+import { generateToken, verifyToken } from "../../utils/jwt";
 import { prisma } from "../../utils/prisma";
 import { ILoginUserPayload, IRegisterUserPayload } from "./auth.interface";
 
@@ -106,8 +106,8 @@ const loginUser = async (payload: ILoginUserPayload) => {
     }
 
     // Check user status
-    if (user.status === UserStatus.BLOCKED) {
-        throw new AppError(status.FORBIDDEN, "Your account is blocked.");
+    if (user.status !== UserStatus.ACTIVE) {
+        throw new AppError(status.FORBIDDEN, "User is not active.");
     }
 
     // Match password
@@ -150,9 +150,65 @@ const loginUser = async (payload: ILoginUserPayload) => {
 };
 
 /**
+ * Get Current Login User
+ */
+const getLogedInUser = async (userId: string) => {};
+
+/**
+ * Get New Access Token Using Refresh Token
+ */
+const getNewRefreshToken = async (refreshToken: string) => {
+    // Verify refresh token
+    const decoded = verifyToken(refreshToken, config.JWT.REFRESH.SECRET) as {
+        id: string;
+        email: string;
+        role: string;
+    };
+
+    // Find user
+    const user = await prisma.user.findUnique({
+        where: { id: decoded.id },
+    });
+
+    if (!user) {
+        throw new AppError(status.UNAUTHORIZED, "User not found.");
+    }
+
+    // Check user status
+    if (user.status !== UserStatus.ACTIVE) {
+        throw new AppError(status.FORBIDDEN, "User is not active.");
+    }
+
+    // Generate new access token
+    const jwtPayload = {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+    };
+
+    const accessToken = generateToken(
+        jwtPayload,
+        config.JWT.ACCESS.SECRET,
+        config.JWT.ACCESS.EXPIRES_IN,
+    );
+
+    const newRefreshToken = generateToken(
+        jwtPayload,
+        config.JWT.REFRESH.SECRET,
+        config.JWT.REFRESH.EXPIRES_IN,
+    );
+
+    return {
+        accessToken,
+        refreshToken: newRefreshToken,
+    };
+};
+
+/**
  * Export Auth Service
  */
 export const authService = {
     registerUser,
     loginUser,
+    getNewRefreshToken,
 };
