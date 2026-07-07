@@ -7,6 +7,7 @@ import { Router } from "express";
  * Local Modules
  */
 import authRouter from "../modules/auth/auth.router";
+import categoriesRouter from "../modules/categories/categories.router";
 import usersRouter from "../modules/users/users.router";
 
 /**
@@ -19,6 +20,7 @@ const apiRouter = Router();
  */
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/users", usersRouter);
+apiRouter.use("/categories", categoriesRouter);
 
 /**
  * Exporting the API Router
