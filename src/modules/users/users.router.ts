@@ -33,7 +33,11 @@ usersRouter.get("/:id", checkAuth(Role.ADMIN), userController.getUserById);
 /**
  * Update User Status: PATCH /api/users/:id/status
  */
-usersRouter.patch("/:id/status", checkAuth(Role.ADMIN), () => {});
+usersRouter.patch(
+    "/:id/status",
+    checkAuth(Role.ADMIN),
+    userController.updateUserStatus,
+);
 
 /**
  * Delete User: DELETE /api/users/:id

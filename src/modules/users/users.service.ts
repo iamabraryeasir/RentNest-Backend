@@ -9,6 +9,7 @@ import status from "http-status";
 import { User } from "../../../generated/prisma/client";
 import { AppError } from "../../utils/AppError";
 import { prisma } from "../../utils/prisma";
+import { IUserUpdateStatusPayload } from "./users.interface";
 
 /**
  * Update User Profile
@@ -104,6 +105,42 @@ async function getUserById(userId: string) {
 }
 
 /**
+ * Update User Status
+ */
+async function updateUserStatus(
+    userId: string,
+    payload: IUserUpdateStatusPayload,
+) {
+    // Check if user exists
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
+    });
+
+    if (!user) {
+        throw new AppError(status.NOT_FOUND, "User not found.");
+    }
+
+    // Update user and return updated data
+    const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: {
+            status: payload.status,
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            status: true,
+            createdAt: true,
+            updatedAt: true,
+        },
+    });
+
+    return updatedUser;
+}
+
+/**
  * Export User Service
  */
-export const userService = { updateUserProfile, getUserById };
+export const userService = { updateUserProfile, getUserById, updateUserStatus };
