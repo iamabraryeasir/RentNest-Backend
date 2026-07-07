@@ -140,11 +140,30 @@ const logoutUser = catchAsync(
 );
 
 /**
+ * Get Current Login User
+ */
+const getLogedInUser = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const userId = req.user!.id;
+
+        const user = await authService.getLogedInUser(userId);
+
+        return sendResponse(res, {
+            success: true,
+            statusCode: status.OK,
+            message: "User fetched successfully",
+            data: user,
+        });
+    },
+);
+
+/**
  * Export Auth Controller
  */
 export const authController = {
     registerUser,
     loginUser,
+    getLogedInUser,
     getNewRefreshToken,
     logoutUser,
 };

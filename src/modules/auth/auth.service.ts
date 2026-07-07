@@ -152,7 +152,27 @@ const loginUser = async (payload: ILoginUserPayload) => {
 /**
  * Get Current Login User
  */
-const getLogedInUser = async (userId: string) => {};
+const getLogedInUser = async (userId: string) => {
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
+    });
+
+    if (!user) {
+        throw new AppError(status.NOT_FOUND, "User not found.");
+    }
+
+    if (user.status !== UserStatus.ACTIVE) {
+        throw new AppError(status.FORBIDDEN, "User is not active.");
+    }
+
+    return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        status: user.status,
+    };
+};
 
 /**
  * Get New Access Token Using Refresh Token
@@ -210,5 +230,6 @@ const getNewRefreshToken = async (refreshToken: string) => {
 export const authService = {
     registerUser,
     loginUser,
+    getLogedInUser,
     getNewRefreshToken,
 };

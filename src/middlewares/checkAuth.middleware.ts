@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import status from "http-status";
 
-import config from "../config";
-import { verifyToken } from "../utils/jwt";
-import { catchAsync } from "../utils/catchAsync";
-import { Role, UserStatus } from "../../generated/prisma/enums";
 import { JwtPayload } from "jsonwebtoken";
-import { prisma } from "../utils/prisma";
+import { Role, UserStatus } from "../../generated/prisma/enums";
+import config from "../config";
 import { AppError } from "../utils/AppError";
+import { catchAsync } from "../utils/catchAsync";
+import { verifyToken } from "../utils/jwt";
+import { prisma } from "../utils/prisma";
 
 export const checkAuth = (...requiredRoles: Role[]) => {
     return catchAsync(
@@ -21,13 +21,16 @@ export const checkAuth = (...requiredRoles: Role[]) => {
             if (!token) {
                 throw new AppError(
                     status.UNAUTHORIZED,
-                    "You are not login. Please login to access the content",
+                    "You are not logged in. Please login to access this route",
                 );
             }
 
             let verifiedToken: JwtPayload;
             try {
-                verifiedToken = verifyToken(token, config.JWT.ACCESS.SECRET) as JwtPayload;
+                verifiedToken = verifyToken(
+                    token,
+                    config.JWT.ACCESS.SECRET,
+                ) as JwtPayload;
             } catch (error: any) {
                 throw new AppError(
                     status.UNAUTHORIZED,
