@@ -171,6 +171,20 @@ erDiagram
 
 ---
 
+## 📮 Postman Collection
+
+A comprehensive Postman collection is included in the root directory for easy testing of all the API endpoints:
+
+- **Collection File**: [RentNest_API.postman_collection](RentNest_API.postman_collection)
+
+### How to use:
+
+1. **Import the collection**: Open Postman, click **Import**, and select the [RentNest_API.postman_collection](RentNest_API.postman_collection) file from the project root.
+2. **Configure Variables**: In Postman, ensure you configure the following variable in the collection's **Variables** tab (or in your active environment):
+    - `base_url`: Set this to the location where your API server is running (e.g., `http://localhost:5000`).
+
+---
+
 ## 🛠️ Installation & Setup Guide
 
 Follow these steps to configure and boot up your local development environment:
