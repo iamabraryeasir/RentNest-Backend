@@ -10,6 +10,7 @@ import authRouter from "../modules/auth/auth.router";
 import categoriesRouter from "../modules/categories/categories.router";
 import propertyRouter from "../modules/properties/properties.router";
 import rentalsRouter from "../modules/rentals/rentals.router";
+import reviewsRouter from "../modules/reviews/reviews.router";
 import usersRouter from "../modules/users/users.router";
 
 /**
@@ -25,6 +26,7 @@ apiRouter.use("/users", usersRouter);
 apiRouter.use("/categories", categoriesRouter);
 apiRouter.use("/properties", propertyRouter);
 apiRouter.use("/rentals", rentalsRouter);
+apiRouter.use("/reviews", reviewsRouter);
 
 /**
  * Exporting the API Router
