@@ -6,6 +6,7 @@ import status from "http-status";
 /**
  * Local Modules
  */
+import { Prisma } from "../../../generated/prisma/client";
 import {
     PropertyStatus,
     RentalRequestStatus,
@@ -117,7 +118,7 @@ async function getAllRentalRequests(query: IQueryOptions) {
             ["createdAt", "requestedMoveIn"],
         );
 
-    const whereConditions: Record<string, any> = { ...filters };
+    const whereConditions: Prisma.RentalRequestWhereInput = { ...filters };
 
     if (search) {
         whereConditions.OR = [
@@ -180,7 +181,7 @@ async function getMyRentalRequests(query: IQueryOptions, tenantId: string) {
             ["createdAt", "requestedMoveIn"],
         );
 
-    const whereConditions: Record<string, any> = {
+    const whereConditions: Prisma.RentalRequestWhereInput = {
         ...filters,
         tenantId,
     };
@@ -242,7 +243,7 @@ async function getIncomingRentalRequests(
             ["createdAt", "requestedMoveIn"],
         );
 
-    const whereConditions: Record<string, any> = {
+    const whereConditions: Prisma.RentalRequestWhereInput = {
         ...filters,
         property: {
             landlordId,

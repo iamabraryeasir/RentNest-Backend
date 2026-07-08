@@ -6,6 +6,7 @@ import status from "http-status";
 /**
  * Local Modules
  */
+import { Prisma } from "../../../generated/prisma/client";
 import { RentalRequestStatus, Role } from "../../../generated/prisma/enums";
 import { AppError } from "../../utils/AppError";
 import { prisma } from "../../utils/prisma";
@@ -192,7 +193,7 @@ async function updateReview(
         );
     }
 
-    const updateData: Record<string, any> = {};
+    const updateData: Prisma.ReviewUpdateInput = {};
 
     if (payload.rating !== undefined) {
         const rating = validateInteger(payload.rating, "Rating", { min: 1 })!;

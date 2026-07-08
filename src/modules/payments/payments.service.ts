@@ -7,6 +7,7 @@ import Stripe from "stripe";
 /**
  * Local Modules
  */
+import { Prisma } from "../../../generated/prisma/client";
 import {
     PaymentStatus,
     RentalRequestStatus,
@@ -136,7 +137,7 @@ async function getPaymentHistory(query: IQueryOptions, tenantId: string) {
         ["createdAt", "amount"],
     );
 
-    const whereConditions: Record<string, any> = {
+    const whereConditions: Prisma.PaymentWhereInput = {
         ...filters,
         tenantId,
     };
