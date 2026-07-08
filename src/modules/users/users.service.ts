@@ -18,13 +18,9 @@ import { IUserUpdateStatusPayload } from "./users.interface";
  */
 async function updateUserProfile(userId: string, payload: Partial<User>) {
     // Check if user exists
-    const user = await prisma.user.findUnique({
+    await prisma.user.findUniqueOrThrow({
         where: { id: userId },
     });
-
-    if (!user) {
-        throw new AppError(status.NOT_FOUND, "User not found.");
-    }
 
     // Validate keys in the payload
     const keys = Object.keys(payload);
@@ -125,7 +121,7 @@ async function getAllUsers(query: IQueryOptions) {
  */
 async function getUserById(userId: string) {
     // Check if user exists
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findUniqueOrThrow({
         where: { id: userId },
         omit: {
             password: true,
@@ -145,10 +141,6 @@ async function getUserById(userId: string) {
         },
     });
 
-    if (!user) {
-        throw new AppError(status.NOT_FOUND, "User not found.");
-    }
-
     return user;
 }
 
@@ -160,13 +152,9 @@ async function updateUserStatus(
     payload: IUserUpdateStatusPayload,
 ) {
     // Check if user exists
-    const user = await prisma.user.findUnique({
+    await prisma.user.findUniqueOrThrow({
         where: { id: userId },
     });
-
-    if (!user) {
-        throw new AppError(status.NOT_FOUND, "User not found.");
-    }
 
     // Update user and return updated data
     const updatedUser = await prisma.user.update({
@@ -193,13 +181,9 @@ async function updateUserStatus(
  */
 async function deleteUser(userId: string) {
     // Check if user exists
-    const user = await prisma.user.findUnique({
+    await prisma.user.findUniqueOrThrow({
         where: { id: userId },
     });
-
-    if (!user) {
-        throw new AppError(status.NOT_FOUND, "User not found.");
-    }
 
     // Delete user
     await prisma.user.delete({

@@ -108,13 +108,9 @@ async function updateCategory(
     payload: Partial<ICreateCategoryPayload>,
 ) {
     // Check if category exists
-    const category = await prisma.category.findUnique({
+    await prisma.category.findUniqueOrThrow({
         where: { id },
     });
-
-    if (!category) {
-        throw new AppError(status.NOT_FOUND, "Category not found.");
-    }
 
     // Validate payload keys
     const keys = Object.keys(payload);
@@ -199,13 +195,9 @@ async function updateCategory(
  */
 async function deleteCategory(id: string) {
     // Check if category exists
-    const category = await prisma.category.findUnique({
+    await prisma.category.findUniqueOrThrow({
         where: { id },
     });
-
-    if (!category) {
-        throw new AppError(status.NOT_FOUND, "Category not found.");
-    }
 
     // Check if category is associated with any properties
     const propertyCount = await prisma.property.count({

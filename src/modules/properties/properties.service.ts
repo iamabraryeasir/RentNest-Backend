@@ -190,12 +190,9 @@ const createPropertyService = async (payload: any, landlordId: string) => {
         validateStringArray(payload.amenities, "Amenities", false) || [];
 
     // Verify Category exists
-    const category = await prisma.category.findUnique({
+    await prisma.category.findUniqueOrThrow({
         where: { id: categoryId },
     });
-    if (!category) {
-        throw new AppError(status.NOT_FOUND, "Category not found.");
-    }
 
     // Create property in database
     const property = await prisma.property.create({

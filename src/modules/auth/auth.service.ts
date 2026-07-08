@@ -146,13 +146,9 @@ async function loginUser(payload: ILoginUserPayload) {
  * Get Current Login User
  */
 async function getLogedInUser(userId: string) {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findUniqueOrThrow({
         where: { id: userId },
     });
-
-    if (!user) {
-        throw new AppError(status.NOT_FOUND, "User not found.");
-    }
 
     if (user.status !== UserStatus.ACTIVE) {
         throw new AppError(status.FORBIDDEN, "User is not active.");
