@@ -102,11 +102,21 @@ const getMyProperties = catchAsync(
  */
 const updateProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
+        const propertyId = req.params?.id as string;
+        const payload = req.body;
+        const landlordId = req.user?.id as string;
+
+        const result = await propertiesService.updatePropertyService(
+            propertyId,
+            payload,
+            landlordId,
+        );
+
         return sendResponse(res, {
             success: true,
             statusCode: status.OK,
             message: "Property updated successfully",
-            data: null,
+            data: result,
         });
     },
 );
@@ -116,11 +126,21 @@ const updateProperty = catchAsync(
  */
 const updatePropertyStatus = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
+        const propertyId = req.params?.id as string;
+        const payload = req.body;
+        const landlordId = req.user?.id as string;
+
+        const result = await propertiesService.updatePropertyStatusService(
+            propertyId,
+            payload,
+            landlordId,
+        );
+
         return sendResponse(res, {
             success: true,
             statusCode: status.OK,
             message: "Property status updated successfully",
-            data: null,
+            data: result,
         });
     },
 );
@@ -130,11 +150,19 @@ const updatePropertyStatus = catchAsync(
  */
 const deleteProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
+        const propertyId = req.params?.id as string;
+        const landlordId = req.user?.id as string;
+
+        const result = await propertiesService.deletePropertyService(
+            propertyId,
+            landlordId,
+        );
+
         return sendResponse(res, {
             success: true,
             statusCode: status.OK,
             message: "Property deleted successfully",
-            data: null,
+            data: result,
         });
     },
 );
