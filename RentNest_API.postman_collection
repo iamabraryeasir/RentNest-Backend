@@ -10,13 +10,13 @@
       "name": "Auth",
       "item": [
         {
-          "name": "Register (Public)",
+          "name": "✅ Register (Public)",
           "request": {
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    // TENANT\r\n    \"name\": \"Tenant 1\",\r\n    \"email\": \"tenant.1@gmail.com\",\r\n    \"password\": \"12345678\",\r\n    \"role\": \"TENANT\"\r\n\r\n    // LANDLORD\r\n    // \"name\": \"Landlord 1\",\r\n    // \"email\": \"landlord.1@gmail.com\",\r\n    // \"password\": \"12345678\",\r\n    // \"role\": \"LANDLORD\"\r\n}",
+              "raw": "{\r\n    // TENANT\r\n    // \"name\": \"Tenant 1\",\r\n    // \"email\": \"tenant.1@gmail.com\",\r\n    // \"password\": \"12345678\",\r\n    // \"role\": \"TENANT\"\r\n\r\n    // LANDLORD\r\n    // \"name\": \"Landlord 1\",\r\n    // \"email\": \"landlord.1@gmail.com\",\r\n    // \"password\": \"12345678\",\r\n    // \"role\": \"LANDLORD\"\r\n\r\n    // LANDLORD\r\n    // \"name\": \"Admin\",\r\n    // \"email\": \"admin@gmail.com\",\r\n    // \"password\": \"12345678\",\r\n    // \"role\": \"LANDLORD\"\r\n\r\n    // Test\r\n    \"name\": \"Test\",\r\n    \"email\": \"test@gmail.com\",\r\n    \"password\": \"12345678\",\r\n    \"role\": \"LANDLORD\"\r\n\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -38,7 +38,7 @@
           "response": []
         },
         {
-          "name": "Login (Public)",
+          "name": "✅ Login (Public)",
           "request": {
             "method": "POST",
             "header": [],
@@ -66,7 +66,7 @@
           "response": []
         },
         {
-          "name": "Refresh Token (Public)",
+          "name": "✅ Refresh Token (Public)",
           "request": {
             "method": "POST",
             "header": [],
@@ -85,7 +85,7 @@
           "response": []
         },
         {
-          "name": "Me (Authenticated)",
+          "name": "✅ Me (Authenticated)",
           "request": {
             "method": "GET",
             "header": [],
@@ -102,6 +102,25 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "✅ Logout (Authenticated)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -109,13 +128,13 @@
       "name": "Users",
       "item": [
         {
-          "name": "Update Profile (Authenticated)",
+          "name": "✅ Update Profile (Authenticated)",
           "request": {
             "method": "PATCH",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"John Doe\",\r\n    \"phone\": \"+8801712345678\"\r\n}",
+              "raw": "{\r\n    \"name\": \"Updated Landlord 1\",\r\n    \"email\": \"landlord.101@gmail.com\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -137,12 +156,12 @@
           "response": []
         },
         {
-          "name": "Get All Users (Admin)",
+          "name": "✅ Get All Users (Admin)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/users",
+              "raw": "{{base_url}}/api/users?sortBy=name&sortOrder=asc",
               "host": [
                 "{{base_url}}"
               ],
@@ -153,17 +172,17 @@
               "query": [
                 {
                   "key": "page",
-                  "value": null,
+                  "value": "",
                   "disabled": true
                 },
                 {
                   "key": "limit",
-                  "value": null,
+                  "value": "2",
                   "disabled": true
                 },
                 {
                   "key": "search",
-                  "value": null,
+                  "value": "",
                   "disabled": true
                 },
                 {
@@ -173,18 +192,16 @@
                 },
                 {
                   "key": "status",
-                  "value": null,
+                  "value": "ACTIVE",
                   "disabled": true
                 },
                 {
                   "key": "sortBy",
-                  "value": null,
-                  "disabled": true
+                  "value": "name"
                 },
                 {
                   "key": "sortOrder",
-                  "value": null,
-                  "disabled": true
+                  "value": "asc"
                 }
               ]
             }
@@ -192,7 +209,7 @@
           "response": []
         },
         {
-          "name": "Get User By ID (Admin)",
+          "name": "✅ Get User By ID (Admin)",
           "request": {
             "method": "GET",
             "header": [],
@@ -209,7 +226,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": ""
+                  "value": "46743bcc-90a3-48ee-91d4-444fae567337"
                 }
               ]
             }
@@ -217,13 +234,13 @@
           "response": []
         },
         {
-          "name": "Update User Status (Admin)",
+          "name": "✅ Update User Status (Admin)",
           "request": {
             "method": "PATCH",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"status\": \"BANNED\"\r\n    // \"status\": \"ACTIVE\"\r\n}",
+              "raw": "{\r\n    // \"status\": \"BLOCKED\"\r\n    \"status\": \"ACTIVE\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -244,7 +261,32 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": ""
+                  "value": "46743bcc-90a3-48ee-91d4-444fae567337"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "✅ Delete User (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "80b7b488-1549-45d8-ac62-01e653121b73"
                 }
               ]
             }
@@ -257,25 +299,7 @@
       "name": "Categories",
       "item": [
         {
-          "name": "Get All Categories (Public)",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/categories",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "categories"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create Category (Admin)",
+          "name": "✅ Create Category (Admin)",
           "request": {
             "method": "POST",
             "header": [],
@@ -302,7 +326,25 @@
           "response": []
         },
         {
-          "name": "Update Category (Admin)",
+          "name": "✅ Get All Categories (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "✅Update Category (Admin)",
           "request": {
             "method": "PATCH",
             "header": [],
@@ -336,7 +378,7 @@
           "response": []
         },
         {
-          "name": "Delete Category (Admin)",
+          "name": "✅ Delete Category (Admin)",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -366,7 +408,7 @@
       "name": "Properties",
       "item": [
         {
-          "name": "Get All Properties (Public)",
+          "name": "✅ Get All Properties (Public)",
           "request": {
             "method": "GET",
             "header": [],
@@ -394,42 +436,41 @@
                 },
                 {
                   "key": "search",
-                  "value": "",
-                  "type": "text",
+                  "value": "1209",
                   "disabled": true
                 },
                 {
                   "key": "city",
-                  "value": "",
+                  "value": "Chattagram",
                   "type": "text",
                   "disabled": true
                 },
                 {
                   "key": "categoryId",
-                  "value": null,
+                  "value": "d89fc892-6336-44b2-b5ce-52d9af6b9ec6",
                   "type": "text",
                   "disabled": true
                 },
                 {
                   "key": "minPrice",
-                  "value": null,
+                  "value": "",
                   "type": "text",
                   "disabled": true
                 },
                 {
                   "key": "maxPrice",
-                  "value": null,
+                  "value": "",
                   "type": "text",
                   "disabled": true
                 },
                 {
                   "key": "bedrooms",
-                  "value": null,
+                  "value": "",
                   "disabled": true
                 },
                 {
                   "key": "bathrooms",
-                  "value": null,
+                  "value": "",
                   "type": "text",
                   "disabled": true
                 },
@@ -457,7 +498,7 @@
           "response": []
         },
         {
-          "name": "Get Property By ID (Public)",
+          "name": "✅Get Property By ID (Public)",
           "request": {
             "method": "GET",
             "header": [],
@@ -474,7 +515,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": ""
+                  "value": "1f4e8aca-159b-413e-9e24-3da681929849"
                 }
               ]
             }
@@ -482,13 +523,13 @@
           "response": []
         },
         {
-          "name": "Create Property (Landlord)",
+          "name": "✅ Create Property (Landlord)",
           "request": {
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"title\": \"Modern Family Apartment\",\r\n    \"description\": \"A spacious apartment near the city center.\",\r\n    \"address\": \"House 12, Road 5\",\r\n    \"city\": \"Dhaka\",\r\n    \"area\": \"Dhanmondi\",\r\n    \"postalCode\": \"1209\",\r\n    \"rentAmount\": 18000,\r\n    \"bedrooms\": 3,\r\n    \"bathrooms\": 2,\r\n    \"propertySize\": 1200,\r\n    \"amenities\": [\r\n        \"WiFi\",\r\n        \"Parking\",\r\n        \"Lift\"\r\n    ],\r\n    \"categoryId\": \"category_id\"\r\n}",
+              "raw": "{\r\n    \"title\": \"Modern Family Apartment 2\",\r\n    \"description\": \"A spacious apartment near the city center.\",\r\n    \"address\": \"House 12, Road 5\",\r\n    \"city\": \"Dhaka\",\r\n    \"area\": \"Dhanmondi\",\r\n    \"postalCode\": \"1209\",\r\n    \"rentAmount\": 18000,\r\n    \"bedrooms\": 3,\r\n    \"bathrooms\": 2,\r\n    \"propertySize\": 1200,\r\n    \"amenities\": [\r\n        \"WiFi\",\r\n        \"Parking\",\r\n        \"Lift\"\r\n    ],\r\n    \"categoryId\": \"d89fc892-6336-44b2-b5ce-52d9af6b9ec6\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -509,12 +550,12 @@
           "response": []
         },
         {
-          "name": "Get My Properties (Landlord)",
+          "name": "✅ Get My Properties (Landlord)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/properties/my-properties?page&limit&status&search&sortBy&sortOrder",
+              "raw": "{{base_url}}/api/properties/my-properties",
               "host": [
                 "{{base_url}}"
               ],
@@ -526,28 +567,33 @@
               "query": [
                 {
                   "key": "page",
-                  "value": null
+                  "value": null,
+                  "disabled": true
                 },
                 {
                   "key": "limit",
-                  "value": null
+                  "value": null,
+                  "disabled": true
                 },
                 {
                   "key": "status",
-                  "value": null
+                  "value": null,
+                  "disabled": true
                 },
                 {
                   "key": "search",
-                  "value": null
+                  "value": null,
+                  "disabled": true
                 },
                 {
                   "key": "sortBy",
-                  "value": null
+                  "value": null,
+                  "disabled": true
                 },
                 {
                   "key": "sortOrder",
                   "value": null,
-                  "type": "text"
+                  "disabled": true
                 }
               ]
             }
@@ -555,7 +601,7 @@
           "response": []
         },
         {
-          "name": "Update Property (Landlord)",
+          "name": "✅ Update Property (Landlord)",
           "request": {
             "method": "PATCH",
             "header": [],
@@ -589,7 +635,7 @@
           "response": []
         },
         {
-          "name": "Update Property Status (Landlord)",
+          "name": "✅ Update Property Status (Landlord)",
           "request": {
             "method": "PATCH",
             "header": [],
@@ -624,7 +670,7 @@
           "response": []
         },
         {
-          "name": "Delete Property (Landlord)",
+          "name": "✅ Delete Property (Landlord)",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -654,13 +700,13 @@
       "name": "Rentals",
       "item": [
         {
-          "name": "Create Rental Request (Tenant)",
+          "name": "✅ Create Rental Request (Tenant)",
           "request": {
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"propertyId\": \"property_id\",\r\n  \"requestedMoveIn\": \"2026-08-01T00:00:00.000Z\",\r\n  \"message\": \"I'm interested in renting this property.\"\r\n}",
+              "raw": "{\r\n  \"propertyId\": \"1f4e8aca-159b-413e-9e24-3da681929849\",\r\n  \"requestedMoveIn\": \"2026-08-01T00:00:00.000Z\",\r\n  \"message\": \"I'm interested in renting this property.\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -681,12 +727,12 @@
           "response": []
         },
         {
-          "name": "Get My Rental Requests (Tenant)",
+          "name": "✅ Get My Rental Requests (Tenant)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/rentals/my-requests?sortBy&sortOrder",
+              "raw": "{{base_url}}/api/rentals/my-requests",
               "host": [
                 "{{base_url}}"
               ],
@@ -698,29 +744,30 @@
               "query": [
                 {
                   "key": "page",
-                  "value": null,
+                  "value": "",
                   "disabled": true
                 },
                 {
                   "key": "limit",
-                  "value": null,
+                  "value": "",
                   "type": "text",
                   "disabled": true
                 },
                 {
                   "key": "status",
-                  "value": null,
+                  "value": "",
                   "type": "text",
                   "disabled": true
                 },
                 {
                   "key": "sortBy",
-                  "value": null
+                  "value": null,
+                  "disabled": true
                 },
                 {
                   "key": "sortOrder",
                   "value": null,
-                  "type": "text"
+                  "disabled": true
                 }
               ]
             }
@@ -728,7 +775,7 @@
           "response": []
         },
         {
-          "name": "Get Rental Request By ID (Tenant)",
+          "name": "✅ Get Rental Request By ID (Tenant)",
           "request": {
             "method": "GET",
             "header": [],
@@ -745,7 +792,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": ""
+                  "value": "a61dc3cf-fc04-420c-93b3-77d86825ce6c"
                 }
               ]
             }
@@ -753,12 +800,12 @@
           "response": []
         },
         {
-          "name": "Get Incoming Rental Requests (Landlord)",
+          "name": "✅ Get Incoming Rental Requests (Landlord)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/rentals/incoming?page&limit&status=&propertyId&sortBy&sortOrder",
+              "raw": "{{base_url}}/api/rentals/incoming",
               "host": [
                 "{{base_url}}"
               ],
@@ -770,29 +817,33 @@
               "query": [
                 {
                   "key": "page",
-                  "value": null
+                  "value": null,
+                  "disabled": true
                 },
                 {
                   "key": "limit",
-                  "value": null
+                  "value": null,
+                  "disabled": true
                 },
                 {
                   "key": "status",
-                  "value": ""
+                  "value": "",
+                  "disabled": true
                 },
                 {
                   "key": "propertyId",
-                  "value": null
+                  "value": null,
+                  "disabled": true
                 },
                 {
                   "key": "sortBy",
                   "value": null,
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "sortOrder",
                   "value": null,
-                  "type": "text"
+                  "disabled": true
                 }
               ]
             }
@@ -800,7 +851,7 @@
           "response": []
         },
         {
-          "name": "Update Rental Request Status (Landlord)",
+          "name": "✅ Update Rental Request Status (Landlord)",
           "request": {
             "method": "PATCH",
             "header": [],
@@ -814,21 +865,20 @@
               }
             },
             "url": {
-              "raw": "{{base_url}}/api/rentals//:id/status",
+              "raw": "{{base_url}}/api/rentals/:id/status",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
                 "api",
                 "rentals",
-                "",
                 ":id",
                 "status"
               ],
               "variable": [
                 {
                   "key": "id",
-                  "value": ""
+                  "value": "a61dc3cf-fc04-420c-93b3-77d86825ce6c"
                 }
               ]
             }
@@ -836,7 +886,7 @@
           "response": []
         },
         {
-          "name": "Get All Rental Requests (Admin)",
+          "name": "✅ Get All Rental Requests (Admin)",
           "request": {
             "method": "GET",
             "header": [],
@@ -901,7 +951,34 @@
       "name": "Reviews",
       "item": [
         {
-          "name": "Get Property Reviews (Public)",
+          "name": "✅ Create Review (Tenant)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"propertyId\": \"1f4e8aca-159b-413e-9e24-3da681929849\",\r\n    \"rating\": 5,\r\n    \"comment\": \"The property was clean and the landlord was very cooperative.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/reviews",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reviews"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "✅ Get Property Reviews (Public)",
           "request": {
             "method": "GET",
             "header": [],
@@ -941,7 +1018,7 @@
               "variable": [
                 {
                   "key": "propertyId",
-                  "value": ""
+                  "value": "1f4e8aca-159b-413e-9e24-3da681929849"
                 }
               ]
             }
@@ -949,34 +1026,7 @@
           "response": []
         },
         {
-          "name": "Create Review (Tenant)",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"propertyId\": \"property_id\",\r\n    \"rating\": 5,\r\n    \"comment\": \"The property was clean and the landlord was very cooperative.\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/api/reviews",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "reviews"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update Review (Tenant)",
+          "name": "✅ Update Review (Tenant)",
           "request": {
             "method": "PATCH",
             "header": [],
@@ -990,13 +1040,13 @@
               }
             },
             "url": {
-              "raw": "{{base_url}}/api/rentals/:id",
+              "raw": "{{base_url}}/api/reviews/:id",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
                 "api",
-                "rentals",
+                "reviews",
                 ":id"
               ],
               "variable": [
@@ -1010,24 +1060,24 @@
           "response": []
         },
         {
-          "name": "Delete Review (Tenant)",
+          "name": "✅ Delete Review (Tenant)",
           "request": {
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/rentals/:id",
+              "raw": "{{base_url}}/api/reviews/:id",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
                 "api",
-                "rentals",
+                "reviews",
                 ":id"
               ],
               "variable": [
                 {
                   "key": "id",
-                  "value": ""
+                  "value": "d4e24938-90cf-452c-a357-8c635a9a38c1"
                 }
               ]
             }
@@ -1040,13 +1090,13 @@
       "name": "Payments (Stripe)",
       "item": [
         {
-          "name": "Create Checkout Session (Tenant)",
+          "name": "✅ Create Checkout Session (Tenant)",
           "request": {
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"rentalRequestId\": \"rental_request_id\"\r\n}",
+              "raw": "{\r\n    \"rentalRequestId\": \"a61dc3cf-fc04-420c-93b3-77d86825ce6c\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1068,7 +1118,7 @@
           "response": []
         },
         {
-          "name": "Stripe Webhook (Stripe)",
+          "name": "✅ Stripe Webhook (Stripe)",
           "request": {
             "method": "POST",
             "header": [],
@@ -1087,35 +1137,45 @@
           "response": []
         },
         {
-          "name": "Get My Payment History (Tenant)",
+          "name": "✅ Get My Payment History (Tenant)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "?page&limit&status&sortBy&sortOrder",
+              "raw": "{{base_url}}/api/payments/history",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "history"
+              ],
               "query": [
                 {
                   "key": "page",
-                  "value": null
+                  "value": null,
+                  "disabled": true
                 },
                 {
                   "key": "limit",
-                  "value": null
+                  "value": null,
+                  "disabled": true
                 },
                 {
                   "key": "status",
                   "value": null,
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "sortBy",
                   "value": null,
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "sortOrder",
                   "value": null,
-                  "type": "text"
+                  "disabled": true
                 }
               ]
             }
@@ -1123,7 +1183,7 @@
           "response": []
         },
         {
-          "name": "Get Payment Details (Tenant)",
+          "name": "✅ Get Payment Details (Tenant)",
           "request": {
             "method": "GET",
             "header": [],
@@ -1140,7 +1200,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": ""
+                  "value": "1dfaa716-299c-459d-a64b-6dbd636b2850"
                 }
               ]
             }
