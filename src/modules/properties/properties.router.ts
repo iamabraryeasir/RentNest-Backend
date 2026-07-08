@@ -21,6 +21,15 @@ const propertyRouter = Router();
 propertyRouter.get("/", propertiesController.getAllProperties);
 
 /**
+ * Get my Properties
+ */
+propertyRouter.get(
+    "/my-properties",
+    checkAuth(Role.LANDLORD),
+    propertiesController.getMyProperties,
+);
+
+/**
  * Get Property By Id
  */
 propertyRouter.get("/:id", propertiesController.getPropertyById);
@@ -32,15 +41,6 @@ propertyRouter.post(
     "/",
     checkAuth(Role.LANDLORD),
     propertiesController.createProperty,
-);
-
-/**
- * Get my Properties
- */
-propertyRouter.get(
-    "/my-properties",
-    checkAuth(Role.LANDLORD),
-    propertiesController.getMyProperties,
 );
 
 /**

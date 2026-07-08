@@ -7,6 +7,7 @@ import status from "http-status";
 /**
  * Local Modules
  */
+import config from "../config";
 import { sendResponse } from "./sendResponse";
 
 /**
@@ -135,7 +136,10 @@ export function globalErrorHandler(
         const prismaError = handlePrismaError(err);
         statusCode = prismaError.statusCode;
         message = prismaError.message;
-        error = err.meta?.cause || err.message || message;
+        error =
+            config.SYSTEM.NODE_ENV === "development"
+                ? err.message
+                : err.meta?.cause || prismaError.message;
     }
 
     // Handle JWT errors

@@ -1,13 +1,12 @@
 /**
  * Node Modules
  */
-import status from "http-status";
 
 /**
  * Local Modules
  */
+import { Prisma } from "../../../generated/prisma/client";
 import { PropertyStatus } from "../../../generated/prisma/enums";
-import { AppError } from "../../utils/AppError";
 import { prisma } from "../../utils/prisma";
 import { IQueryOptions, parseQuery } from "../../utils/queryHelpers";
 import {
@@ -235,8 +234,50 @@ const createPropertyService = async (payload: any, landlordId: string) => {
 /**
  * Get My Properties Service
  */
-const getMyPropertiesService = async () => {
-    return [];
+const getMyPropertiesService = async (
+    query: IQueryOptions,
+    landlordId: string,
+) => {
+    const { page, limit, skip, sortBy, sortOrder } = parseQuery(
+        query,
+        [],
+        ["createdAt", "rentAmount", "bedrooms", "bathrooms", "propertySize"],
+    );
+
+    console.log({ landlordId });
+
+    const whereConditions: Prisma.PropertyWhereInput = {
+        landlordId,
+    };
+
+    const properties = await prisma.property.findMany({
+        where: whereConditions,
+        skip,
+        take: limit,
+        orderBy: {
+            [sortBy]: sortOrder,
+        },
+        include: {
+            category: true,
+        },
+        omit: {
+            landlordId: true,
+            categoryId: true,
+        },
+    });
+
+    const total = await prisma.property.count({
+        where: whereConditions,
+    });
+
+    return {
+        meta: {
+            page,
+            limit,
+            total,
+        },
+        data: properties,
+    };
 };
 
 /**

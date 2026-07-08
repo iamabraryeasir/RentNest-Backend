@@ -16,8 +16,9 @@ import { propertiesService } from "./properties.service";
  */
 const getAllProperties = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const { data, meta } =
-            await propertiesService.getAllPropertiesService(req.query);
+        const { data, meta } = await propertiesService.getAllPropertiesService(
+            req.query,
+        );
 
         return sendResponse(res, {
             success: true,
@@ -79,11 +80,19 @@ const createProperty = catchAsync(
  */
 const getMyProperties = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
+        const landlordId = req.user?.id as string;
+
+        const result = await propertiesService.getMyPropertiesService(
+            req.query,
+            landlordId,
+        );
+
         return sendResponse(res, {
             success: true,
             statusCode: status.OK,
             message: "My properties fetched successfully",
-            data: null,
+            meta: result.meta,
+            data: result.data,
         });
     },
 );
