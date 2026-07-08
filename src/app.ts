@@ -19,6 +19,11 @@ import { notFoundHandler } from "./utils/notFound";
 const app: Application = express();
 
 /**
+ * Stripe Webhook Raw Middleware
+ */
+app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
+
+/**
  * Basic Application Middlewares
  */
 app.use(express.json());

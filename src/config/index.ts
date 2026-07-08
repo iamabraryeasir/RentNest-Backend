@@ -22,6 +22,11 @@ const config = {
             EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN as string,
         },
     },
+
+    STRIPE: {
+        SECRET_KEY: process.env.STRIPE_SECRET_KEY as string,
+        WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET as string,
+    },
 };
 
 export default Object.freeze(config);
