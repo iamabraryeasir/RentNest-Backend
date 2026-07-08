@@ -37,8 +37,12 @@ const createReview = catchAsync(
 const getAllReviewsForProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const query = req.query;
+        const propertyId = req.params.propertyId as string;
 
-        const result = await reviewsService.getAllReviewsForProperty(query);
+        const result = await reviewsService.getAllReviewsForProperty(
+            query,
+            propertyId,
+        );
 
         return sendResponse(res, {
             success: true,

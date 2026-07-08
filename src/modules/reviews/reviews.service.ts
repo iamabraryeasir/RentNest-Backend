@@ -101,20 +101,21 @@ async function createReview(payload: ICreateReviewPayload, tenantId: string) {
 /**
  * Get All Reviews Of a Property Service
  */
-async function getAllReviewsForProperty(query: IQueryOptions) {
-    const { page, limit, skip, sortBy, sortOrder, filters } = parseQuery(
+async function getAllReviewsForProperty(
+    query: IQueryOptions,
+    propertyId: string,
+) {
+    const validatedPropertyId = validateString(propertyId, "Property ID")!;
+
+    const { page, limit, skip, sortBy, sortOrder } = parseQuery(
         query,
-        ["propertyId"],
+        [],
         ["createdAt", "rating"],
     );
 
-    if (!filters.propertyId) {
-        throw new AppError(status.BAD_REQUEST, "Property ID is required.");
-    }
-
     const reviews = await prisma.review.findMany({
         where: {
-            propertyId: filters.propertyId,
+            propertyId: validatedPropertyId,
         },
         skip,
         take: limit,
@@ -134,7 +135,7 @@ async function getAllReviewsForProperty(query: IQueryOptions) {
 
     const total = await prisma.review.count({
         where: {
-            propertyId: filters.propertyId,
+            propertyId: validatedPropertyId,
         },
     });
 
@@ -156,8 +157,10 @@ async function updateReview(
     payload: IUpdateReviewPayload,
     tenantId: string,
 ) {
+    const validatedId = validateString(id, "Review ID")!;
+
     const review = await prisma.review.findUnique({
-        where: { id },
+        where: { id: validatedId },
     });
 
     if (!review) {
@@ -208,7 +211,7 @@ async function updateReview(
     }
 
     const updatedReview = await prisma.review.update({
-        where: { id },
+        where: { id: validatedId },
         data: updateData,
         include: {
             tenant: {
@@ -228,8 +231,10 @@ async function updateReview(
  * Delete Review Service
  */
 async function deleteReview(id: string, user: { id: string; role: Role }) {
+    const validatedId = validateString(id, "Review ID")!;
+
     const review = await prisma.review.findUnique({
-        where: { id },
+        where: { id: validatedId },
     });
 
     if (!review) {
@@ -245,7 +250,7 @@ async function deleteReview(id: string, user: { id: string; role: Role }) {
     }
 
     await prisma.review.delete({
-        where: { id },
+        where: { id: validatedId },
     });
 
     return;

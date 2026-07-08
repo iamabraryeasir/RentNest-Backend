@@ -23,7 +23,10 @@ reviewsRouter.post("/", checkAuth(Role.TENANT), reviewsController.createReview);
 /**
  * Get All Reviews Of a Property
  */
-reviewsRouter.get("/", reviewsController.getAllReviewsForProperty);
+reviewsRouter.get(
+    "/property/:propertyId",
+    reviewsController.getAllReviewsForProperty,
+);
 
 /**
  * Update Review
