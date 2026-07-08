@@ -12,27 +12,23 @@ import config from "../../config";
 import { AppError } from "../../utils/AppError";
 import { generateToken, verifyToken } from "../../utils/jwt";
 import { prisma } from "../../utils/prisma";
+import {
+    validateEmail,
+    validatePassword,
+    validateString,
+} from "../../utils/validation";
 import { ILoginUserPayload, IRegisterUserPayload } from "./auth.interface";
 
 /**
  * User Registration Service
  */
 async function registerUser(payload: IRegisterUserPayload) {
-    const { name, email, password, role } = payload;
+    const { role } = payload;
 
-    // User input validation
-    if (!name || typeof name !== "string" || name.trim() === "") {
-        throw new AppError(status.BAD_REQUEST, "Name is required.");
-    }
-    if (!email || typeof email !== "string" || !/^\S+@\S+\.\S+$/.test(email)) {
-        throw new AppError(status.BAD_REQUEST, "A valid email is required.");
-    }
-    if (!password || typeof password !== "string" || password.length < 6) {
-        throw new AppError(
-            status.BAD_REQUEST,
-            "Password must be at least 6 characters long.",
-        );
-    }
+    const validatedName = validateString(payload.name, "Name")!;
+    const validatedEmail = validateEmail(payload.email);
+    const validatedPassword = validatePassword(payload.password, 6);
+
     if (!role) {
         throw new AppError(status.BAD_REQUEST, "Role is required.");
     }
@@ -54,20 +50,20 @@ async function registerUser(payload: IRegisterUserPayload) {
 
     // Email must be unique
     const existingUser = await prisma.user.findUnique({
-        where: { email },
+        where: { email: validatedEmail },
     });
     if (existingUser) {
         throw new AppError(status.CONFLICT, "Email is already registered.");
     }
 
     // Password encryption using bcryptjs
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hash(validatedPassword, 12);
 
     // Save everything to db using prisma
     const newUser = await prisma.user.create({
         data: {
-            name,
-            email,
+            name: validatedName,
+            email: validatedEmail,
             password: hashedPassword,
             role,
         },
@@ -87,19 +83,12 @@ async function registerUser(payload: IRegisterUserPayload) {
  * User Login Service
  */
 async function loginUser(payload: ILoginUserPayload) {
-    const { email, password } = payload;
-
-    // Validate user input
-    if (!email || typeof email !== "string" || !/^\S+@\S+\.\S+$/.test(email)) {
-        throw new AppError(status.BAD_REQUEST, "A valid email is required.");
-    }
-    if (!password || typeof password !== "string" || password.trim() === "") {
-        throw new AppError(status.BAD_REQUEST, "Password is required.");
-    }
+    const validatedEmail = validateEmail(payload.email);
+    const validatedPassword = validateString(payload.password, "Password")!;
 
     // Match email and password
     const user = await prisma.user.findUnique({
-        where: { email },
+        where: { email: validatedEmail },
     });
 
     if (!user) {
@@ -112,7 +101,10 @@ async function loginUser(payload: ILoginUserPayload) {
     }
 
     // Match password
-    const isPasswordMatched = await bcrypt.compare(password, user.password);
+    const isPasswordMatched = await bcrypt.compare(
+        validatedPassword,
+        user.password,
+    );
     if (!isPasswordMatched) {
         throw new AppError(status.UNAUTHORIZED, "Incorrect email or password.");
     }

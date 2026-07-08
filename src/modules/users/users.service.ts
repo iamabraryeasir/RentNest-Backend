@@ -10,6 +10,7 @@ import { User } from "../../../generated/prisma/client";
 import { AppError } from "../../utils/AppError";
 import { prisma } from "../../utils/prisma";
 import { parseQuery, IQueryOptions } from "../../utils/queryHelpers";
+import { validateString } from "../../utils/validation";
 import { IUserUpdateStatusPayload } from "./users.interface";
 
 /**
@@ -43,21 +44,16 @@ async function updateUserProfile(userId: string, payload: Partial<User>) {
         );
     }
 
-    // Valiate name if provided
+    // Validate name if provided
     if (payload.name !== undefined) {
-        if (typeof payload.name !== "string" || payload.name.trim() === "") {
-            throw new AppError(
-                status.BAD_REQUEST,
-                "Name must be a valid, non-empty string.",
-            );
-        }
+        payload.name = validateString(payload.name, "Name")!;
     }
 
     // Update user and return updated data
     const updatedUser = await prisma.user.update({
         where: { id: userId },
         data: {
-            name: payload.name?.trim(),
+            name: payload.name,
         },
         select: {
             id: true,

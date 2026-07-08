@@ -6,32 +6,15 @@ import status from "http-status";
 import { AppError } from "../../utils/AppError";
 import { prisma } from "../../utils/prisma";
 import { parseQuery, IQueryOptions } from "../../utils/queryHelpers";
+import { validateString } from "../../utils/validation";
 import { ICreateCategoryPayload } from "./categories.interface";
 
 /**
  * Create New Category
  */
 async function createNewCategory(payload: ICreateCategoryPayload) {
-    const { name, slug } = payload;
-
-    // Validate name
-    if (!name || typeof name !== "string" || name.trim() === "") {
-        throw new AppError(
-            status.BAD_REQUEST,
-            "Category name is required and must be a non-empty string.",
-        );
-    }
-
-    // Validate slug
-    if (!slug || typeof slug !== "string" || slug.trim() === "") {
-        throw new AppError(
-            status.BAD_REQUEST,
-            "Category slug is required and must be a non-empty string.",
-        );
-    }
-
-    const trimmedName = name.trim();
-    const trimmedSlug = slug.trim().toLowerCase();
+    const trimmedName = validateString(payload.name, "Category name")!;
+    const trimmedSlug = validateString(payload.slug, "Category slug")!.toLowerCase();
 
     // Check slug pattern (alphanumeric and hyphens only)
     const slugRegex = /^[a-z0-9-]+$/;
@@ -155,13 +138,7 @@ async function updateCategory(
 
     // Validate name if provided
     if (payload.name !== undefined) {
-        if (typeof payload.name !== "string" || payload.name.trim() === "") {
-            throw new AppError(
-                status.BAD_REQUEST,
-                "Category name must be a valid, non-empty string.",
-            );
-        }
-        const trimmedName = payload.name.trim();
+        const trimmedName = validateString(payload.name, "Category name")!;
 
         // Check if name is unique among other categories
         const existingName = await prisma.category.findFirst({
@@ -181,13 +158,7 @@ async function updateCategory(
 
     // Validate slug if provided
     if (payload.slug !== undefined) {
-        if (typeof payload.slug !== "string" || payload.slug.trim() === "") {
-            throw new AppError(
-                status.BAD_REQUEST,
-                "Category slug must be a valid, non-empty string.",
-            );
-        }
-        const trimmedSlug = payload.slug.trim().toLowerCase();
+        const trimmedSlug = validateString(payload.slug, "Category slug")!.toLowerCase();
 
         // Check slug pattern
         const slugRegex = /^[a-z0-9-]+$/;
