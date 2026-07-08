@@ -14,7 +14,7 @@
         "esModuleInterop": true,
         "noUncheckedSideEffectImports": true,
         "moduleDetection": "force",
-        "ignoreDeprecations": "5.0",
+        "ignoreDeprecations": "6.0",
         "skipLibCheck": true
     },
     "include": ["prisma.config.ts", "src/**/*"],
