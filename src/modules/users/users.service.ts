@@ -9,9 +9,12 @@ import status from "http-status";
 import { User } from "../../../generated/prisma/client";
 import { AppError } from "../../utils/AppError";
 import { prisma } from "../../utils/prisma";
-import { parseQuery, IQueryOptions } from "../../utils/queryHelpers";
+import { IQueryOptions, parseQuery } from "../../utils/queryHelpers";
 import { validateString } from "../../utils/validation";
-import { IUserUpdateStatusPayload } from "./users.interface";
+import {
+    IUserUpdateRolePayload,
+    IUserUpdateStatusPayload,
+} from "./users.interface";
 
 /**
  * Update User Profile
@@ -69,11 +72,12 @@ async function updateUserProfile(userId: string, payload: Partial<User>) {
  * Get All Users
  */
 async function getAllUsers(query: IQueryOptions) {
-    const { page, limit, skip, sortBy, sortOrder, search, filters } = parseQuery(
-        query,
-        ["role", "status"],
-        ["createdAt", "name", "email", "role", "status"],
-    );
+    const { page, limit, skip, sortBy, sortOrder, search, filters } =
+        parseQuery(
+            query,
+            ["role", "status"],
+            ["createdAt", "name", "email", "role", "status"],
+        );
 
     const whereConditions: Record<string, any> = { ...filters };
 
@@ -194,6 +198,35 @@ async function deleteUser(userId: string) {
 }
 
 /**
+ * Update User Role
+ */
+async function updateUserRole(userId: string, payload: IUserUpdateRolePayload) {
+    // Check if user exists
+    await prisma.user.findUniqueOrThrow({
+        where: { id: userId },
+    });
+
+    // Update user role and return updated data
+    const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: {
+            role: payload.role,
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            status: true,
+            createdAt: true,
+            updatedAt: true,
+        },
+    });
+
+    return updatedUser;
+}
+
+/**
  * Export User Service
  */
 export const userService = {
@@ -202,4 +235,5 @@ export const userService = {
     getUserById,
     updateUserStatus,
     deleteUser,
+    updateUserRole,
 };

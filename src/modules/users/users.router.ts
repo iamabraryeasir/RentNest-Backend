@@ -40,6 +40,15 @@ usersRouter.patch(
 );
 
 /**
+ * Update User Role: PATCH /api/users/:id/role
+ */
+usersRouter.patch(
+    "/:id/role",
+    checkAuth(Role.ADMIN),
+    userController.updateUserRole,
+);
+
+/**
  * Delete User: DELETE /api/users/:id
  */
 usersRouter.delete("/:id", checkAuth(Role.ADMIN), userController.deleteUser);
