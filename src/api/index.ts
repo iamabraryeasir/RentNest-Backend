@@ -8,6 +8,7 @@ import { Router } from "express";
  */
 import authRouter from "../modules/auth/auth.router";
 import categoriesRouter from "../modules/categories/categories.router";
+import dashboardRouter from "../modules/dashboard/dashboard.router";
 import paymentsRouter from "../modules/payments/payments.router";
 import propertyRouter from "../modules/properties/properties.router";
 import rentalsRouter from "../modules/rentals/rentals.router";
@@ -29,6 +30,7 @@ apiRouter.use("/properties", propertyRouter);
 apiRouter.use("/rentals", rentalsRouter);
 apiRouter.use("/reviews", reviewsRouter);
 apiRouter.use("/payments", paymentsRouter);
+apiRouter.use("/dashboard", dashboardRouter);
 
 /**
  * Exporting the API Router
