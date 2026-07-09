@@ -48,7 +48,7 @@ propertyRouter.post(
  */
 propertyRouter.patch(
     "/:id",
-    checkAuth(Role.LANDLORD),
+    checkAuth(Role.LANDLORD, Role.ADMIN),
     propertiesController.updateProperty,
 );
 
@@ -57,7 +57,7 @@ propertyRouter.patch(
  */
 propertyRouter.patch(
     "/:id/status",
-    checkAuth(Role.LANDLORD),
+    checkAuth(Role.LANDLORD, Role.ADMIN),
     propertiesController.updatePropertyStatus,
 );
 
@@ -66,7 +66,7 @@ propertyRouter.patch(
  */
 propertyRouter.delete(
     "/:id",
-    checkAuth(Role.LANDLORD),
+    checkAuth(Role.LANDLORD, Role.ADMIN),
     propertiesController.deleteProperty,
 );
 

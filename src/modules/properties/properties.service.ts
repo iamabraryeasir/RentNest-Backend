@@ -7,7 +7,7 @@ import status from "http-status";
  * Local Modules
  */
 import { Prisma } from "../../../generated/prisma/client";
-import { PropertyStatus } from "../../../generated/prisma/enums";
+import { PropertyStatus, Role } from "../../../generated/prisma/enums";
 import { AppError } from "../../utils/AppError";
 import { prisma } from "../../utils/prisma";
 import { IQueryOptions, parseQuery } from "../../utils/queryHelpers";
@@ -288,15 +288,15 @@ const getMyPropertiesService = async (
 const updatePropertyService = async (
     propertyId: string,
     payload: any,
-    landlordId: string,
+    user: { id: string; role: Role },
 ) => {
     // Check if property exists
     const property = await prisma.property.findUniqueOrThrow({
         where: { id: propertyId },
     });
 
-    // Check ownership
-    if (property.landlordId !== landlordId) {
+    // Check ownership or admin status
+    if (user.role !== Role.ADMIN && property.landlordId !== user.id) {
         throw new AppError(
             status.FORBIDDEN,
             "You are not authorized to update this property.",
@@ -433,15 +433,15 @@ const updatePropertyService = async (
 const updatePropertyStatusService = async (
     propertyId: string,
     payload: any,
-    landlordId: string,
+    user: { id: string; role: Role },
 ) => {
     // Check if property exists
     const property = await prisma.property.findUniqueOrThrow({
         where: { id: propertyId },
     });
 
-    // Check ownership
-    if (property.landlordId !== landlordId) {
+    // Check ownership or admin status
+    if (user.role !== Role.ADMIN && property.landlordId !== user.id) {
         throw new AppError(
             status.FORBIDDEN,
             "You are not authorized to update this property status.",
@@ -485,14 +485,17 @@ const updatePropertyStatusService = async (
 /**
  * Delete Property Service
  */
-const deletePropertyService = async (propertyId: string, landlordId: string) => {
+const deletePropertyService = async (
+    propertyId: string,
+    user: { id: string; role: Role },
+) => {
     // Check if property exists
     const property = await prisma.property.findUniqueOrThrow({
         where: { id: propertyId },
     });
 
-    // Check ownership
-    if (property.landlordId !== landlordId) {
+    // Check ownership or admin status
+    if (user.role !== Role.ADMIN && property.landlordId !== user.id) {
         throw new AppError(
             status.FORBIDDEN,
             "You are not authorized to delete this property.",
