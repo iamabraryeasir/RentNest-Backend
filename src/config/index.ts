@@ -27,6 +27,11 @@ const config = {
         SECRET_KEY: process.env.STRIPE_SECRET_KEY as string,
         WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET as string,
     },
+
+    ADMIN: {
+        EMAIL: process.env.ADMIN_EMAIL as string,
+        PASSWORD: process.env.ADMIN_PASSWORD as string,
+    },
 };
 
 export default Object.freeze(config);
