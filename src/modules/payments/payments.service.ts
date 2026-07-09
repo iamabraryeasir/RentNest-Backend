@@ -288,6 +288,67 @@ async function handleWebhook(rawBody: Buffer, signature: string) {
 }
 
 /**
+ * Get All Payments Service (Admin)
+ */
+async function getAllPayments(query: IQueryOptions) {
+    const { page, limit, skip, sortBy, sortOrder, filters } = parseQuery(
+        query,
+        ["status", "tenantId"],
+        ["createdAt", "amount"],
+    );
+
+    const whereConditions: Prisma.PaymentWhereInput = {
+        ...filters,
+    };
+
+    const payments = await prisma.payment.findMany({
+        where: whereConditions,
+        skip,
+        take: limit,
+        orderBy: {
+            [sortBy]: sortOrder,
+        },
+        include: {
+            tenant: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            },
+            rentalRequest: {
+                include: {
+                    property: {
+                        include: {
+                            landlord: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    email: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    const total = await prisma.payment.count({
+        where: whereConditions,
+    });
+
+    return {
+        meta: {
+            page,
+            limit,
+            total,
+        },
+        data: payments,
+    };
+}
+
+/**
  * Export Payments Service
  */
 export const paymentsService = {
@@ -295,4 +356,5 @@ export const paymentsService = {
     getPaymentHistory,
     getPaymentById,
     handleWebhook,
+    getAllPayments,
 };

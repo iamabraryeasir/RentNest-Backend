@@ -16,6 +16,15 @@ import { paymentsController } from "./payments.controller";
 const paymentsRouter = Router();
 
 /**
+ * Get All Payments (Admin)
+ */
+paymentsRouter.get(
+    "/",
+    checkAuth(Role.ADMIN),
+    paymentsController.getAllPayments,
+);
+
+/**
  * Create Stripe Checkout Session
  */
 paymentsRouter.post(

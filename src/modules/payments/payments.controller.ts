@@ -106,6 +106,25 @@ const handleWebhook = catchAsync(
 );
 
 /**
+ * Get All Payments (Admin)
+ */
+const getAllPayments = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const query = req.query;
+
+        const result = await paymentsService.getAllPayments(query);
+
+        return sendResponse(res, {
+            success: true,
+            statusCode: status.OK,
+            message: "All payments retrieved successfully",
+            meta: result.meta,
+            data: result.data,
+        });
+    },
+);
+
+/**
  * Export Payments Controller
  */
 export const paymentsController = {
@@ -113,4 +132,5 @@ export const paymentsController = {
     getPaymentHistory,
     getPaymentById,
     handleWebhook,
+    getAllPayments,
 };
