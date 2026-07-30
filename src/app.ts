@@ -4,6 +4,7 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { Application } from "express";
+import morgan from "morgan";
 
 /**
  * Local Modules
@@ -22,6 +23,15 @@ const app: Application = express();
  * Stripe Webhook Raw Middleware
  */
 app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
+
+/**
+ * Request / Response Logger
+ */
+if (config.SYSTEM.NODE_ENV === "development") {
+    app.use(morgan("dev"));
+} else {
+    app.use(morgan("combined"));
+}
 
 /**
  * Basic Application Middlewares
