@@ -16,10 +16,10 @@ import {
 import config from "../../config";
 import { AppError } from "../../utils/AppError";
 import { prisma } from "../../utils/prisma";
+import { IQueryOptions, parseQuery } from "../../utils/queryHelpers";
 import { stripe } from "../../utils/stripe";
 import { validateString } from "../../utils/validation";
 import { ICreateCheckoutSessionPayload } from "./payments.interface";
-import { IQueryOptions, parseQuery } from "../../utils/queryHelpers";
 
 /**
  * Create Stripe Checkout Session Service
@@ -101,8 +101,8 @@ async function createCheckoutSession(
                 quantity: 1,
             },
         ],
-        success_url: `${config.FRONTEND_URL}/payments/success`,
-        cancel_url: `${config.FRONTEND_URL}/payments/cancel`,
+        success_url: `${config.FRONTEND_URL}/payment/success`,
+        cancel_url: `${config.FRONTEND_URL}/payment/cancel`,
         customer_email: tenantEmail,
         metadata: {
             rentalRequestId,
